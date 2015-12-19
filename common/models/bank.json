@@ -1,12 +1,16 @@
 {
-  "name": "Offices",
+  "name": "Bank",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "address": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
       "type": "string",
       "required": true
     }

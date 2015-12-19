@@ -32,20 +32,20 @@
     "dataSource": "db",
     "public": false
   },
-  "Banks": {
-    "dataSource": "db",
+  "Bank": {
+    "dataSource": "currency",
     "public": false
   },
-  "Offices": {
-    "dataSource": "db",
+  "Office": {
+    "dataSource": "currency",
     "public": false
   },
-  "Rates": {
-    "dataSource": "db",
+  "Rate": {
+    "dataSource": "currency",
     "public": true
   },
-  "Currencies": {
-    "dataSource": "db",
+  "Currency": {
+    "dataSource": "currency",
     "public": false
   }
 }

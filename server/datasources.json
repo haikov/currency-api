@@ -2,5 +2,14 @@
   "db": {
     "name": "db",
     "connector": "memory"
+  },
+  "currency": {
+    "host": "localhost",
+    "port": 27017,
+    "database": "currency",
+    "username": "",
+    "password": "",
+    "name": "currency",
+    "connector": "mongodb"
   }
 }
