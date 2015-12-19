@@ -31,5 +31,21 @@
   "Role": {
     "dataSource": "db",
     "public": false
+  },
+  "Banks": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Offices": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Rates": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Currencies": {
+    "dataSource": "db",
+    "public": false
   }
 }
