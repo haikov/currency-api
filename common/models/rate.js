@@ -1,4 +1,13 @@
 module.exports = function(Rate) {
+  Rate.disableRemoteMethod("upsert", true);
+  Rate.disableRemoteMethod("updateAll", true);
+  Rate.disableRemoteMethod("updateAttributes", false);
+
+  Rate.disableRemoteMethod("find", true);
+  Rate.disableRemoteMethod("findOne", true);
+
+  Rate.disableRemoteMethod("deleteById", true);
+
   Rate.add = function(request, reqObject, cb) {
     var app = Rate.app;
 
@@ -103,6 +112,35 @@ module.exports = function(Rate) {
       }
     }, 3000);
   };
+
+  Rate.on('attached', function() {
+    Rate.disableRemoteMethod('find', true);
+    Rate.findById = function(id, filter, cb) {
+      if (id === 'today') {
+        var start = new Date();
+        start.setHours(0,0,0,0);
+
+        var end = new Date();
+        end.setHours(23,59,59,999);
+
+        Rate.find({created_on: {$gte: start, $lt: end}}, function (e, result) {
+          if (!e) {
+            cb(null, {success: true, rates: result});
+          } else {
+            cb(null, {success: false, error: e});
+          }
+        });
+      } else {
+        cb(null, {success: false, error: 'Please specify the date'});
+      }
+
+    };
+  });
+
+  Rate.remoteMethod('findToday', {
+    returns: {arg: 'data', type: 'object'},
+    http: {path: '/', verb: 'get'}
+  });
 
   // POST add request handler
   Rate.remoteMethod('add', {
