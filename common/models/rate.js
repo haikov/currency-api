@@ -9,6 +9,11 @@ module.exports = function(Rate) {
       Currency = app.models.Currency,
       Token = app.models.Token;
 
+    if (!request || !request.data) {
+      cb(null, {success: false, error: 'Request body can\'t be empty'});
+      return;
+    }
+
     var responded = false;
     Token.find({where: {value: '' + apiToken}}, function(e, result) {
       if (!e) {
