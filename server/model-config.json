@@ -34,17 +34,21 @@
   },
   "Bank": {
     "dataSource": "currency",
-    "public": false
+    "public": true
   },
   "Office": {
     "dataSource": "currency",
-    "public": false
+    "public": true
   },
   "Rate": {
     "dataSource": "currency",
     "public": true
   },
   "Currency": {
+    "dataSource": "currency",
+    "public": true
+  },
+  "Token": {
     "dataSource": "currency",
     "public": false
   }
