@@ -1,7 +1,7 @@
 module.exports = function(Rate) {
   Rate.disableRemoteMethod("upsert", true);
   Rate.disableRemoteMethod("updateAll", true);
-  Rate.disableRemoteMethod("updateAttributes", false);
+  Rate.disableRemoteMethod("updateAttributes", true);
 
   Rate.disableRemoteMethod("find", true);
   Rate.disableRemoteMethod("findOne", true);
@@ -82,7 +82,8 @@ module.exports = function(Rate) {
             var end = new Date();
             end.setHours(23,59,59,999);
 
-            Rate.find({created_on: {$gte: start, $lt: end}, where: {
+            Rate.find({where: {
+              date: {gte: start, lt: end},
               '_office.address': office.address,
               '_currency.name': currency.name
             }}, function (e, result) {
@@ -123,7 +124,7 @@ module.exports = function(Rate) {
         var end = new Date();
         end.setHours(23,59,59,999);
 
-        Rate.find({created_on: {$gte: start, $lt: end}}, function (e, result) {
+        Rate.find({where: {date: {gte: start, lt: end}}}, function (e, result) {
           if (!e) {
             cb(null, {success: true, rates: result});
           } else {
