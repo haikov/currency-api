@@ -47,5 +47,9 @@
   "Currency": {
     "dataSource": "currency",
     "public": true
+  },
+  "Token": {
+    "dataSource": "currency",
+    "public": false
   }
 }
