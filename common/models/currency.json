@@ -12,7 +12,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "rates": {
+      "type": "hasMany",
+      "model": "Rate",
+      "foreignKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }

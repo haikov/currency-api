@@ -16,7 +16,19 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "offices": {
+      "type": "hasMany",
+      "model": "Office",
+      "foreignKey": ""
+    },
+    "rates": {
+      "type": "hasMany",
+      "model": "Rate",
+      "foreignKey": "",
+      "through": "Office"
+    }
+  },
   "acls": [],
   "methods": {}
 }

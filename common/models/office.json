@@ -18,13 +18,14 @@
   "validations": [],
   "relations": {
     "bank": {
-      "type": "embedsOne",
+      "type": "belongsTo",
       "model": "Bank",
-      "property": "bank",
-      "options": {
-        "validate": true,
-        "forceId": false
-      }
+      "foreignKey": ""
+    },
+    "rates": {
+      "type": "hasMany",
+      "model": "Rate",
+      "foreignKey": ""
     }
   },
   "acls": [],

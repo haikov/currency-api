@@ -14,91 +14,64 @@ module.exports = function(Rate) {
       return;
     }
 
-    var responded = false;
-    Token.find({where: {value: '' + apiToken}}, function(e, result) {
-      if (!e) {
-        if (result.length === 0) {
-          cb(null, {success: false, error: 'Wrong application token'});
-          responded = true;
-        } else {
-          request.data.forEach(function(item) {
-            var bank = new Bank({name: item.bank_name, phone: '0'}),
-              office = new Office({address: item.office_address, name: item.office_name, _bank: bank}),
-              currency = new Currency({name: item.type});
+    var responded = false,
+      isError = false,
+      errorMessage = '';
 
-            var rate = new Rate({
-              date: new Date(),
-              value_sell: item.sell,
-              value_buy: item.buy,
-              _currency: currency,
-              _office: office
-            });
-
-            Bank.find({where: {name: bank.name, phone: bank.phone}}, function (e, result) {
-              if (!e) {
-                if (result.length > 0) bank.save();
-              } else {
-                if (!responded) {
-                  cb(null, {success: false, error: e});
-                  responded = true;
-                }
-              }
-            });
-
-            Office.find({where: {address: office.address, name: office.name}}, function (e, result) {
-              if (!e) {
-                if (result.length > 0) office.save();
-              } else {
-                if (!responded) {
-                  cb(null, {success: false, error: e});
-                  responded = true;
-                }
-              }
-            });
-
-            Currency.find({where: {name: currency.name}}, function (e, result) {
-              if (!e) {
-                if (result.length > 0) currency.save();
-              } else {
-                if (!responded) {
-                  cb(null, {success: false, error: e});
-                  responded = true;
-                }
-              }
-            });
-
-            var start = new Date();
-            start.setHours(0,0,0,0);
-
-            var end = new Date();
-            end.setHours(23,59,59,999);
-
-            Rate.find({created_on: {$gte: start, $lt: end}, where: {
-              '_office.address': office.address,
-              '_currency.name': currency.name
-            }}, function (e, result) {
-              if (!e) {
-                if (result.length === 0) rate.save();
-              } else {
-                if (!responded) {
-                  cb(null, {success: false, error: e});
-                  responded = true;
-                }
-              }
-            });
-          });
-        }
+    Token.check(apiToken, function(tokenMatch) {
+      if (!tokenMatch) {
+        cb(null, {success: false, message: 'You provided wrong application token'});
+        responded = true;
       } else {
-        if (!responded) {
-          cb(null, {success: false, error: e});
-          responded = true;
-        }
+        request.data.forEach(function(item) {
+
+          Bank.findOrCreate({name: item.bank_name, phone: '0'}, {name: item.bank_name, phone: '0'}, function(error, bank) {
+            if (!error) {
+              Office.findOrCreate({address: item.office_address, name: item.office_name, bankId: bank.id}, {address: item.office_address, name: item.office_name, bankId: bank.id}, function(error, office) {
+                if (!error) {
+                  Currency.findOrCreate({name: item.type}, {name: item.type}, function(error, currency) {
+                    if (!error) {
+                      var today = new Date();
+                      Rate.findOrCreate({
+                        date: today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate(),
+                        currencyId: currency.id,
+                        officeId: office.id,
+                        value_sell: item.sell,
+                        value_buy: item.buy
+                      }, function(error, rate) {
+                          if (!error) {
+                            //...
+                          } else {
+                            isError = true;
+                            errorMessage = error;
+                          }
+                      })
+                    } else {
+                      isError = true;
+                      errorMessage = error;
+                    }
+                  });
+                } else {
+                  isError = true;
+                  errorMessage = error;
+                }
+              });
+            } else {
+              isError = true;
+              errorMessage = error;
+            }
+          });
+        });
       }
     });
 
     setTimeout(function() {
       if (!responded) {
-        cb(null, {success: true});
+        if (!isError) {
+          cb(null, {success: true});
+        } else {
+          cb(null, {success: false, message: errorMessage});
+        }
         responded = true;
       }
     }, 3000);
