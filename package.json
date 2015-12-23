@@ -23,5 +23,8 @@
     "type": "",
     "url": ""
   },
-  "description": "currency-api"
+  "description": "currency-api",
+  "engines": {
+    "node": "0.12.x"
+  }
 }
