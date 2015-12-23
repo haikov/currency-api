@@ -1,8 +1,8 @@
 var disableAllRestMethods = require('./../../helpers/disableAllRestMethods');
 
 module.exports = function(Rate) {
-  disableAllRestMethods(Rate, ['find', 'findById', 'findOne', '__findById__office', '__get__office',
-  '__findById__currency', '__get__currency']);
+  //disableAllRestMethods(Rate, ['find', 'findById', 'findOne', '__findById__office', '__get__office',
+  //'__findById__currency', '__get__currency']);
 
   Rate.add = function(request, reqObject, cb) {
     var app = Rate.app;
